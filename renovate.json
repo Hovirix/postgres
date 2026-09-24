@@ -1,0 +1,58 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    "docker:pinDigests",
+    "helpers:pinGitHubActionDigests"
+  ],
+  "dependencyDashboard": true,
+  "automerge": true,
+  "platformAutomerge": true,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Update pgvector PostgreSQL base image",
+      "managerFilePatterns": [
+        "/^Dockerfile$/"
+      ],
+      "matchStrings": [
+        "ARG PGVECTOR_IMAGE=(?<currentValue>[^\\s]+)\\nARG PGVECTOR_DIGEST=(?<currentDigest>sha256:[a-f0-9]+)"
+      ],
+      "depNameTemplate": "pgvector/pgvector",
+      "packageNameTemplate": "pgvector/pgvector",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "regex:^(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-pg(?<major>\\d+)-(?<compatibility>bookworm)$"
+    },
+    {
+      "customType": "regex",
+      "description": "Update VectorChord image",
+      "managerFilePatterns": [
+        "/^Dockerfile$/"
+      ],
+      "matchStrings": [
+        "ARG VECTORCHORD_IMAGE=(?<currentValue>[^\\s]+)\\nARG VECTORCHORD_DIGEST=(?<currentDigest>sha256:[a-f0-9]+)"
+      ],
+      "depNameTemplate": "tensorchord/vchord-scratch",
+      "packageNameTemplate": "tensorchord/vchord-scratch",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "regex:^pg(?<major>\\d+)-v(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)$"
+    }
+  ],
+  "packageRules": [
+    {
+      "description": "Group PostgreSQL runtime updates",
+      "matchPackageNames": [
+        "pgvector/pgvector",
+        "tensorchord/vchord-scratch"
+      ],
+      "groupName": "postgres runtime"
+    },
+    {
+      "description": "Group GitHub Actions updates",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "github actions"
+    }
+  ]
+}
