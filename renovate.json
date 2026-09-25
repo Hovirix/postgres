@@ -8,37 +8,21 @@
   "dependencyDashboard": true,
   "automerge": true,
   "platformAutomerge": true,
-  "customManagers": [
+  "packageRules": [
     {
-      "customType": "regex",
-      "description": "Update pgvector PostgreSQL base image",
-      "managerFilePatterns": [
-        "/^Dockerfile$/"
+      "description": "Version PostgreSQL vector image tags",
+      "matchPackageNames": [
+        "pgvector/pgvector"
       ],
-      "matchStrings": [
-        "ARG PGVECTOR_IMAGE=(?<currentValue>[^\\s]+)\\nARG PGVECTOR_DIGEST=(?<currentDigest>sha256:[a-f0-9]+)"
-      ],
-      "depNameTemplate": "pgvector/pgvector",
-      "packageNameTemplate": "pgvector/pgvector",
-      "datasourceTemplate": "docker",
-      "versioningTemplate": "regex:^(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-pg(?<major>\\d+)-(?<compatibility>bookworm)$"
+      "versioning": "regex:^(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)-pg(?<major>\\d+)-(?<compatibility>bookworm)$"
     },
     {
-      "customType": "regex",
-      "description": "Update VectorChord image",
-      "managerFilePatterns": [
-        "/^Dockerfile$/"
+      "description": "Version VectorChord image tags",
+      "matchPackageNames": [
+        "tensorchord/vchord-scratch"
       ],
-      "matchStrings": [
-        "ARG VECTORCHORD_IMAGE=(?<currentValue>[^\\s]+)\\nARG VECTORCHORD_DIGEST=(?<currentDigest>sha256:[a-f0-9]+)"
-      ],
-      "depNameTemplate": "tensorchord/vchord-scratch",
-      "packageNameTemplate": "tensorchord/vchord-scratch",
-      "datasourceTemplate": "docker",
-      "versioningTemplate": "regex:^pg(?<major>\\d+)-v(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)$"
-    }
-  ],
-  "packageRules": [
+      "versioning": "regex:^pg(?<major>\\d+)-v(?<minor>\\d+)\\.(?<patch>\\d+)\\.(?<build>\\d+)$"
+    },
     {
       "description": "Group PostgreSQL runtime updates",
       "matchPackageNames": [
